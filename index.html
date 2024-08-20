@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Wallet</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+    body {
+      background-image: linear-gradient(333deg, #1c6151, #0f6838);
+      display: flex;
+      flex-direction: column;
+      font-family: "Ubuntu", sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      align-items: center;
+      color: #fbfbf7;
+      justify-content: center;
+    }
+    .img{
+      object-fit: contain;
+    height: 42px;
+    border-radius: 24px;
+    }
+    .heading {
+      margin: 24px auto 0px;
+    }
+
+    #connect {
+      margin: 15px;
+    padding: 15px 15px;
+    width: 240px;
+    font-size: larger;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    font-style: italic;
+    border-radius: 6px;
+    border: none;
+    background-color: #000000b5;
+    color: whitesmoke;
+    }
+
+    #main {
+     display: none;
+    }
+
+    #msg{
+      text-align: center;
+    }
+
+    .mainContain>div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+    }
+
+    .mainContain>div:nth-child(2n+1) {
+      background-color: rgb(242 246 139 / 23%);
+    }
+
+    .mainContain input {
+      font-size: large;
+      font-weight: bold;
+      /* outline: none; */
+      padding: 6px 15px;
+      border-radius: 6px;
+      border: none;
+      margin: 15px auto;
+      width: 420px;
+      height: 24px;
+    }
+
+    .mainContain button {
+      margin: 15px;
+      font-size: larger;
+      font-weight: bold;
+      border-radius: 15px;
+      outline: none;
+      border: none;
+      padding: 9px 15px;
+      width: 240px;
+      color: whitesmoke;
+      background-color: #000000b5;
+    }
+
+    .mainContain button:hover {
+      background-color: black;
+      color: goldenrod;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="heading">
+    <h1>Fixed Yield Protocal</h1>
+  </div>
+  <button id="connect">Connect Wallet</button>
+
+  <p id="msg">Connect Your Wallet</p>
+
+  <div id="main">
+    
+    <div class="mainContain">
+
+      <div class="deposit">
+        <h1>Deposit Tokens</h1>
+        <input type="text" placeholder="Ammount to deposit">
+        <button>Deposit</button>
+      </div>
+
+      <div class="redeem">
+        <h1>Redeem Tokens</h1>
+        <input type="text" placeholder="Ammount to redeem">
+        <button>Redeem</button>
+      </div>
+      
+
+      <div class="trade">
+        <h1>Trade Yield Tokens</h1>
+        <input type="text" placeholder="Ammount to trade">
+        <input type="text" placeholder="Price in FTH">
+        <input type="text" placeholder="Byer address">
+        <button>Trade Yield</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let connect = document.getElementById('connect');
+    let main = document.getElementById('main');
+    let msg = document.getElementById('msg');
+    connect.addEventListener('click', () => {
+      let account;
+      if (typeof window.ethereum !== 'undefined') {
+        ethereum.request({ method: 'eth_requestAccounts' }).then(link => {
+          account = link[0];
+          connect.innerHTML='<img class="img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJZaVpfhv3kgZA46GoqfVNIFhR6pXIdX4_Rg&s" alt=""> Wallet Connected';
+          connect.style.backgroundColor='white';
+          connect.style.color='orange';
+          main.style.display = 'block';
+          msg.innerHTML = `Wallet Connected <br> <br>User ID : ${account}`;
+          msg.style.color='orange'
+          ethereum.request({ method: 'eth_getBalance', params: [account, 'latest'] }).then(result => {
+            let balance = parseInt(result, 16);
+            balance = balance / (10 ** 18);
+            msg.innerHTML += `<br> Net Balance: ${balance}ETH`;
+          })
+        });
+
+      }
+      else{
+        msg.innerText=`Metamask is not connected / instaled in your browser`
+        msg.style.color='red';
+        msg.style.backgroundColor='#ffffff8a'
+        msg.style.fontSize='larger';
+        msg.style.padding='6px 15px';
+        msg.style.borderRadius='6px'
+      }
+    });
+  </script>
+</body>
+
+</html>
